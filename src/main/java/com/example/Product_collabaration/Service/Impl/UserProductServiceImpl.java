@@ -10,10 +10,12 @@ import com.example.Product_collabaration.Repository.Service.TransactionRepoServi
 import com.example.Product_collabaration.Repository.Service.UserProductRepoService;
 import com.example.Product_collabaration.Service.ProductService;
 import com.example.Product_collabaration.Service.UserProductService;
+import com.example.Product_collabaration.feignclient.UserCollaboration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.QueryAnnotation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -21,8 +23,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Service
 public class UserProductServiceImpl implements UserProductService {
 
+    @Autowired
+    private UserCollaboration userCollaboration;
     @Autowired
     private ProductRepoService productRepoService;
     @Autowired
@@ -36,10 +41,10 @@ public class UserProductServiceImpl implements UserProductService {
     public ResponseEntity<ResponseDTO> addUserProduct(PurchaseDTO purchaseDTO) {
 
 
-
-     String url="http//localhost/User/isUser/"+purchaseDTO.getUserId();
-
-     ResponseDTO responseDTO=restTemplate.getForObject(url, ResponseDTO.class);
+    ResponseDTO responseDTO=userCollaboration.getUser(purchaseDTO.getUserId()).getBody();
+//     String url="http//localhost/User/isUser/"+purchaseDTO.getUserId();
+//
+//     ResponseDTO responseDTO=restTemplate.getForObject(url, ResponseDTO.class);
      if(responseDTO.getData().equals("true"))
      {
 
